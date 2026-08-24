@@ -8,7 +8,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27aa3520-15f3-4b29-8f67-12ab2dd5a11f" name="Changes" comment="" />
+    <list default="true" id="27aa3520-15f3-4b29-8f67-12ab2dd5a11f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Node_Chat/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Node_Chat/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,6 +18,9 @@
   </component>
   <component name="DpaMonitoringSettings">
     <option name="firstShow" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Node_Chat_Console/Program.cs" root0="FORCE_HIGHLIGHTING" />
@@ -36,6 +41,7 @@
     ".NET Project.ConsoleApp1.executor": "Run",
     ".NET Project.Node_Chat_Console.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -72,7 +78,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1787591025060</updated>
-      <workItem from="1787591026329" duration="871000" />
+      <workItem from="1787591026329" duration="3021000" />
     </task>
     <servers />
   </component>
