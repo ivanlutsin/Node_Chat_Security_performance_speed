@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "FPCElGsSL8U=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\ivanl\\RiderProjects\\Node_Chat\\Node_Chat_Console\\Node_Chat_Console.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ivanl\\.nuget\\packages\\libsodium\\1.0.22\\libsodium.1.0.22.nupkg.sha512",
+    "C:\\Users\\ivanl\\.nuget\\packages\\sodium.core\\1.4.1\\sodium.core.1.4.1.nupkg.sha512"
+  ],
+  "logs": []
+}

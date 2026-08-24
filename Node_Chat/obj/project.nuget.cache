@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "4tN54aSM/94=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\ivanl\\RiderProjects\\Node_Chat\\Node_Chat\\Node_Chat.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ivanl\\.nuget\\packages\\libsodium\\1.0.22\\libsodium.1.0.22.nupkg.sha512",
+    "C:\\Users\\ivanl\\.nuget\\packages\\sodium.core\\1.4.1\\sodium.core.1.4.1.nupkg.sha512"
+  ],
+  "logs": []
+}

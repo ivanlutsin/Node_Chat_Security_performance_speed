@@ -1,0 +1,12 @@
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\bin\Debug\net9.0\Node_Chat.deps.json
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\bin\Debug\net9.0\Node_Chat.dll
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\bin\Debug\net9.0\Node_Chat.pdb
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\Node_Chat.csproj.AssemblyReference.cache
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\Node_Chat.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\Node_Chat.AssemblyInfoInputs.cache
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\Node_Chat.AssemblyInfo.cs
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\Node_Chat.csproj.CoreCompileInputs.cache
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\Node_Chat.dll
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\refint\Node_Chat.dll
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\Node_Chat.pdb
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\ref\Node_Chat.dll
