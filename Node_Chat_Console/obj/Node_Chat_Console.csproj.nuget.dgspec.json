@@ -126,6 +126,16 @@
       "frameworks": {
         "net9.0-windows10.0.19041": {
           "targetAlias": "net9.0-windows10.0.19041.0",
+          "dependencies": {
+            "InTheHand.BluetoothLE": {
+              "target": "Package",
+              "version": "[4.0.44, )"
+            },
+            "InTheHand.Net.Bluetooth": {
+              "target": "Package",
+              "version": "[4.2.4, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

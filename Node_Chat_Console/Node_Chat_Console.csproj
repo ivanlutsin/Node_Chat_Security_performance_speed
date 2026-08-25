@@ -11,4 +11,9 @@
       <ProjectReference Include="..\Node_Chat\Node_Chat.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="InTheHand.BluetoothLE" Version="4.0.44" />
+      <PackageReference Include="InTheHand.Net.Bluetooth" Version="4.2.4" />
+    </ItemGroup>
+
 </Project>

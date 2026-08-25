@@ -39,3 +39,5 @@ C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat_Console\obj\Debug\net9.0-window
 C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat_Console\obj\Debug\net9.0-windows10.0.19041.0\Node_Chat_Console.pdb
 C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat_Console\obj\Debug\net9.0-windows10.0.19041.0\Node_Chat_Console.genruntimeconfig.cache
 C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat_Console\obj\Debug\net9.0-windows10.0.19041.0\ref\Node_Chat_Console.dll
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat_Console\bin\Debug\net9.0-windows10.0.19041.0\InTheHand.BluetoothLE.dll
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat_Console\bin\Debug\net9.0-windows10.0.19041.0\InTheHand.Net.Bluetooth.dll

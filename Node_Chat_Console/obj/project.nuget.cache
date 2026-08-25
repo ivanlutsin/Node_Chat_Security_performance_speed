@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "pvr50Hyzwm4=",
+  "dgSpecHash": "v0tADlmcylE=",
   "success": true,
   "projectFilePath": "C:\\Users\\ivanl\\RiderProjects\\Node_Chat\\Node_Chat_Console\\Node_Chat_Console.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\ivanl\\.nuget\\packages\\inthehand.bluetoothle\\4.0.44\\inthehand.bluetoothle.4.0.44.nupkg.sha512",
+    "C:\\Users\\ivanl\\.nuget\\packages\\inthehand.net.bluetooth\\4.2.4\\inthehand.net.bluetooth.4.2.4.nupkg.sha512",
     "C:\\Users\\ivanl\\.nuget\\packages\\libsodium\\1.0.22\\libsodium.1.0.22.nupkg.sha512",
     "C:\\Users\\ivanl\\.nuget\\packages\\sodium.core\\1.4.1\\sodium.core.1.4.1.nupkg.sha512",
     "C:\\Users\\ivanl\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512"
