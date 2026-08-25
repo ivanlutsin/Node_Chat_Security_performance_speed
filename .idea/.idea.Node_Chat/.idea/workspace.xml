@@ -10,38 +10,17 @@
   <component name="ChangeListManager">
     <list default="true" id="27aa3520-15f3-4b29-8f67-12ab2dd5a11f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Node_Chat/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Node_Chat/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat/bin/Debug/net9.0/Node_Chat.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat/bin/Debug/net9.0/Node_Chat.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat/bin/Debug/net9.0/Node_Chat.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat/bin/Debug/net9.0/Node_Chat.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/Node_Chat.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/Node_Chat.AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/Node_Chat.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/Node_Chat.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/Node_Chat.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/Node_Chat.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/Node_Chat.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/Node_Chat.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/Node_Chat.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/Node_Chat.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/ref/Node_Chat.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/ref/Node_Chat.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/refint/Node_Chat.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat/obj/Debug/net9.0/refint/Node_Chat.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat/obj/rider.project.restore.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat_Console/Node_Chat_Console.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/Node_Chat_Console.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat_Console/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node_Chat_Console/bin/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/bin/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node_Chat_Console/bin/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.exe" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/bin/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node_Chat_Console/bin/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/bin/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/Node_Chat_Console.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/apphost.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/ref/Node_Chat_Console.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/ref/Node_Chat_Console.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/refint/Node_Chat_Console.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/Debug/net9.0-windows10.0.19041.0/refint/Node_Chat_Console.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/Node_Chat_Console.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/Node_Chat_Console.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/project.nuget.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/project.packagespec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/rider.project.model.nuget.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node_Chat_Console/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/Node_Chat_Console/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,6 +92,7 @@
       <updated>1787591025060</updated>
       <workItem from="1787591026329" duration="4135000" />
       <workItem from="1787649230266" duration="7778000" />
+      <workItem from="1787657334213" duration="1082000" />
     </task>
     <servers />
   </component>
