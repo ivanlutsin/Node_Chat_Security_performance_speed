@@ -17,38 +17,24 @@ using InTheHand.Net.Sockets;
 const string DEBUG_MODE = ""; 
 
 Console.WriteLine("Добро пожаловать в Node Chat");
+Task.Delay(500).Wait();
+Console.WriteLine("Компиляция режимов связи");
+Task.Delay(1000).Wait();
+Console.WriteLine("Выбери режим работы:");
+Console.WriteLine("1. UDP (Wi-Fi / Локальная сеть)");
+Console.WriteLine("2. BLUETOOTH");
+Console.WriteLine("Введите номер режима");
+string selectedMode = Console.ReadLine();
 
-string selectedMode = DEBUG_MODE;
-
-// Если хак не задан, показываем меню
-if (string.IsNullOrEmpty(selectedMode))
-{
-    Console.WriteLine("Компиляция режимов связи");
-    Task.Delay(1000).Wait();
-    Console.WriteLine("Выбери режим работы:");
-    Console.WriteLine("1. UDP (Wi-Fi / Локальная сеть)");
-    Console.WriteLine("2. BLE (Bluetooth Low Energy)");
-    Console.Write("Ввод: ");
-    var choice = Console.ReadLine();
-    selectedMode = choice == "1" ? "UDP" : "BLE";
-}
-else
-{
-    Console.WriteLine($"[DEBUG] Автозапуск в режиме: {selectedMode} (см. константу DEBUG_MODE)\n");
-}
-
-if (selectedMode == "UDP")
+if (selectedMode == "1")
 {
     RunUdpMode();
 }
-else if (selectedMode == "BLE")
+else if (selectedMode == "2")
 {
-    await RunBluetoothMode();
+    await RunBluetoothEncrypted();
 }
 
-// ==========================================
-// РЕЖИМ 1: UDP (То, что работало с картошкой)
-// ==========================================2
 void RunUdpMode()
 {
     Console.WriteLine("=== ЗАПУСК UDP РЕЖИМА ===");
@@ -56,98 +42,95 @@ void RunUdpMode()
     const int PORT = 11000;
 
     // Шаг 1: Генерация ключей
-Console.WriteLine("[1/4] Генерация ключей...");
-var (myPub, myPriv) = crypto.GenerateKeyPair();
-Console.WriteLine($"Твой публичный ключ:\n{Convert.ToBase64String(myPub)}\n");
+    Console.WriteLine("[1/4] Генерация ключей...");
+    var (myPub, myPriv) = crypto.GenerateKeyPair();
+    Console.WriteLine($"Твой публичный ключ:\n{Convert.ToBase64String(myPub)}\n");
 
 // Шаг 2: Обмен ключами
-Console.Write("[2/4] Вставь публичный ключ собеседника: ");
-var otherPubStr = Console.ReadLine();
-var otherPub = Convert.FromBase64String(otherPubStr);
+    Console.Write("[2/4] Вставь публичный ключ собеседника: ");
+    var otherPubStr = Console.ReadLine();
+    var otherPub = Convert.FromBase64String(otherPubStr);
 
 // Шаг 3: Вычисление общего секрета
-Console.WriteLine("[3/4] Вычисление общего секрета...");
-var sharedSecret = crypto.ComputeSharedSecret(myPriv, otherPub);
-Console.WriteLine("✅ Общий секрет вычислен!\n");
+    Console.WriteLine("[3/4] Вычисление общего секрета...");
+    var sharedSecret = crypto.ComputeSharedSecret(myPriv, otherPub);
+    Console.WriteLine("✅ Общий секрет вычислен!\n");
 
 // Шаг 4: Ввод IP собеседника
-Console.Write("[4/4] Введи IP-адрес собеседника (например, 192.168.10.216): ");
-var targetIp = Console.ReadLine();
-var targetEndPoint = new IPEndPoint(IPAddress.Parse(targetIp), PORT);
+    Console.Write("[4/4] Введи IP-адрес собеседника (например, 192.168.10.216): ");
+    var targetIp = Console.ReadLine();
+    var targetEndPoint = new IPEndPoint(IPAddress.Parse(targetIp), PORT);
 
-Console.WriteLine("Канал создан");
-Console.WriteLine("Пишите сообщение и жми Enter");
+    Console.WriteLine("Канал создан");
+    Console.WriteLine("Пишите сообщение и жми Enter");
 
 // Запускаем UDP-сокет
-using var udpClient = new UdpClient(PORT);
-var groupEP = new IPEndPoint(IPAddress.Any, PORT);
+    using var udpClient = new UdpClient(PORT);
+    var groupEP = new IPEndPoint(IPAddress.Any, PORT);
 
 // Запускаем приемник в фоновом потоке
-var cts = new CancellationTokenSource();
-Task.Run(() =>
-{
-    Console.WriteLine("[Система] Приемник запущен. Ожидаю сообщений...\n");
-    
-    while (!cts.Token.IsCancellationRequested)
+    var cts = new CancellationTokenSource();
+    Task.Run(() =>
     {
-        try
+        Console.WriteLine("[Система] Приемник запущен. Ожидаю сообщений...\n");
+
+        while (!cts.Token.IsCancellationRequested)
         {
-            byte[] bytes = udpClient.Receive(ref groupEP);
-            var decrypted = crypto.Decrypt(bytes, sharedSecret);
-            var message = Encoding.UTF8.GetString(decrypted);
-            
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"[Собеседник]: {message}");
-            Console.ResetColor();
-            Console.Write("> ");
-        }
-        catch (Exception e)
-        {
-            if (!cts.Token.IsCancellationRequested)
+            try
             {
-                Console.WriteLine($"[Ошибка приема]: {e.Message}");
+                byte[] bytes = udpClient.Receive(ref groupEP);
+                var decrypted = crypto.Decrypt(bytes, sharedSecret);
+                var message = Encoding.UTF8.GetString(decrypted);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"[Собеседник]: {message}");
+                Console.ResetColor();
+                Console.Write("> ");
+            }
+            catch (Exception e)
+            {
+                if (!cts.Token.IsCancellationRequested)
+                {
+                    Console.WriteLine($"[Ошибка приема]: {e.Message}");
+                }
             }
         }
-    }
-}, cts.Token);
+    }, cts.Token);
 
 // Основной цикл отправки
-Console.Write("> ");
-while (true)
-{
-    var text = Console.ReadLine();
-    
-    if (text.ToLower() == "exit")
+    Console.Write("> ");
+    while (true)
     {
-        cts.Cancel();
-        Console.WriteLine("\n[Система] Завершение работы...");
-        break;
+        var text = Console.ReadLine();
+
+        if (text.ToLower() == "exit")
+        {
+            cts.Cancel();
+            Console.WriteLine("\n[Система] Завершение работы...");
+            break;
+        }
+
+        if (!string.IsNullOrEmpty(text))
+        {
+            var messageBytes = Encoding.UTF8.GetBytes(text);
+            var encrypted = crypto.Encrypt(messageBytes, sharedSecret);
+
+            udpClient.Send(encrypted, encrypted.Length, targetEndPoint);
+            Console.Write("> ");
+        }
     }
-    
-    if (!string.IsNullOrEmpty(text))
-    {
-        var messageBytes = Encoding.UTF8.GetBytes(text);
-        var encrypted = crypto.Encrypt(messageBytes, sharedSecret);
-        
-        udpClient.Send(encrypted, encrypted.Length, targetEndPoint);
-        Console.Write("> ");
-    }
-}
 
 // Ждем завершения фонового потока
-Task.Delay(1000).Wait();
-Console.WriteLine("До свидания!");
+    Task.Delay(1000).Wait();
+    Console.WriteLine("До свидания!");
 }
 
 // ==========================================
-// РЕЖИМ 2: BLE (Новый Dual-режим)
+// РЕЖИМ 2: BLUETOOTH
 // ==========================================
-
-
-
-async Task RunBluetoothMode()
+async Task RunBluetoothEncrypted()
 {
-    Console.WriteLine("=== ЗАПУСК CLASSIC BLUETOOTH ===");
+    Console.WriteLine("\n=== ЗАПУСК CLASSIC BLUETOOTH ===");
     Console.WriteLine("Выбери роль:");
     Console.WriteLine("1. Сервер (ждет подключения)");
     Console.WriteLine("2. Клиент (подключается)");
@@ -155,132 +138,74 @@ async Task RunBluetoothMode()
     var role = Console.ReadLine();
 
     if (role == "1")
-{
-    // ============ СЕРВЕР ============
-    Console.WriteLine("\n[Система] Создание RFCOMM сервера...");
-    
-    try
     {
-        var listener = new BluetoothListener(BluetoothService.SerialPort);
-        listener.Start();
+        // ============ СЕРВЕР ============
+        Console.WriteLine("\n[Система] Создание RFCOMM сервера...");
         
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("✅ СЕРВЕР ЗАПУЩЕН");
-        Console.ResetColor();
-        Console.WriteLine("Жду подключения клиента...\n");
-        
-        var client = await listener.AcceptBluetoothClientAsync();
-        var stream = client.GetStream();
-        
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("✅ КЛИЕНТ ПОДКЛЮЧЕН!");
-        Console.ResetColor();
-        Console.WriteLine("Можно писать сообщения (для выхода 'exit'):\n");
-        Console.Write("> ");
-
-        // Чтение в фоновом потоке
-        var buffer = new byte[1024];
-        Task.Run(async () =>
+        try
         {
-            while (true)
-            {
-                try
-                {
-                    var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-                    if (bytesRead > 0)
-                    {
-                        var message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"[Собеседник]: {message}");
-                        Console.ResetColor();
-                        Console.Write("> ");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[Ошибка чтения]: {ex.Message}");
-                    break;
-                }
-            }
-        });
-
-        // Отправка
-        while (true)
-        {
-            var text = Console.ReadLine();
-            if (text.ToLower() == "exit") break;
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                var data = Encoding.UTF8.GetBytes(text);
-                await stream.WriteAsync(data, 0, data.Length);
-                await stream.FlushAsync(); // ВАЖНО: сбрасываем буфер!
-                Console.WriteLine($"[Отправлено {data.Length} байт]");
-                Console.Write("> ");
-            }
-        }
-
-        client.Close();
-        listener.Stop();
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"❌ ОШИБКА: {ex.Message}");
-    }
-}
-    else if (role == "2")
-{
-    // ============ КЛИЕНТ ============
-    Console.WriteLine("\n[Система] Поиск устройств...");
-    
-    try
-    {
-        var client = new BluetoothClient();
-        var devices = client.DiscoverDevices();
-        var deviceList = devices.ToList();
-        
-        Console.WriteLine($"Найдено устройств: {deviceList.Count}\n");
-        
-        for (int i = 0; i < deviceList.Count; i++)
-        {
-            var device = deviceList[i];
-            if (device.DeviceName != null && device.DeviceName.Length > 0)
-            {
-                Console.WriteLine($"{i + 1}. {device.DeviceName} ({device.DeviceAddress})");
-            }
-        }
-        
-        Console.Write("\nВыбери устройство (номер): ");
-        var choice = Console.ReadLine();
-        
-        if (int.TryParse(choice, out int index) && index > 0 && index <= deviceList.Count)
-        {
-            var targetDevice = deviceList[index - 1];
+            var listener = new BluetoothListener(BluetoothService.SerialPort);
+            listener.Start();
             
-            Console.WriteLine($"\n[Система] Подключение к {targetDevice.DeviceName}...");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("✅ СЕРВЕР ЗАПУЩЕН");
+            Console.ResetColor();
+            Console.WriteLine("Жду подключения клиента...\n");
             
-            await client.ConnectAsync(targetDevice.DeviceAddress, BluetoothService.SerialPort);
-            
+            var client = await listener.AcceptBluetoothClientAsync();
             var stream = client.GetStream();
             
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("✅ ПОДКЛЮЧЕНО!");
+            Console.WriteLine("✅ CONNECTED!");
             Console.ResetColor();
-            Console.WriteLine("Можно писать сообщения (для выхода 'exit'):\n");
+
+            // === ГЕНЕРАЦИЯ КЛЮЧЕЙ ===
+            Console.WriteLine("\n[Криптография] Генерация пары ключей X25519...");
+            var crypto = new CryptoService();
+            var (myPub, myPriv) = crypto.GenerateKeyPair();
+            
+            Console.WriteLine($"\n[Твой публичный ключ]:\n{Convert.ToBase64String(myPub)}\n");
+            
+            // Отправляем свой публичный ключ
+            var myPubKeyBytes = Encoding.UTF8.GetBytes(Convert.ToBase64String(myPub));
+            await stream.WriteAsync(myPubKeyBytes, 0, myPubKeyBytes.Length);
+            await stream.FlushAsync();
+            
+            // Получаем публичный ключ собеседника
+            var buffer = new byte[2048];
+            var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+            var theirPubStr = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+            var theirPub = Convert.FromBase64String(theirPubStr);
+            
+            Console.WriteLine($"\n[Публичный ключ собеседника]:\n{theirPubStr}\n");
+            
+            // Вычисляем общий секрет
+            var sharedSecret = crypto.ComputeSharedSecret(myPriv, theirPub);
+            
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("✅ ОБЩИЙ СЕКРЕТ ВЫЧИСЛЕН!");
+            Console.WriteLine("🔐 Все сообщения шифруются (XChaCha20-Poly1305)");
+            Console.ResetColor();
+            Console.WriteLine("\nМожно писать сообщения (для выхода 'exit'):\n");
             Console.Write("> ");
 
-            // Чтение в фоновом потоке
-            var buffer = new byte[1024];
+            // Чтение в фоновом потоке (с расшифровкой)
             Task.Run(async () =>
             {
+                var readBuffer = new byte[4096];
                 while (true)
                 {
                     try
                     {
-                        var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-                        if (bytesRead > 0)
+                        var readBytes = await stream.ReadAsync(readBuffer, 0, readBuffer.Length);
+                        if (readBytes > 0)
                         {
-                            var message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                            var encrypted = new byte[readBytes];
+                            Array.Copy(readBuffer, encrypted, readBytes);
+                            
+                            var decrypted = crypto.Decrypt(encrypted, sharedSecret);
+                            var message = Encoding.UTF8.GetString(decrypted);
+                            
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine($"[Собеседник]: {message}");
                             Console.ResetColor();
@@ -289,13 +214,13 @@ async Task RunBluetoothMode()
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"[Ошибка чтения]: {ex.Message}");
+                        Console.WriteLine($"\n[Ошибка чтения]: {ex.Message}");
                         break;
                     }
                 }
             });
 
-            // Отправка
+            // Отправка (с шифрованием)
             while (true)
             {
                 var text = Console.ReadLine();
@@ -303,21 +228,151 @@ async Task RunBluetoothMode()
 
                 if (!string.IsNullOrEmpty(text))
                 {
-                    var data = Encoding.UTF8.GetBytes(text);
-                    await stream.WriteAsync(data, 0, data.Length);
-                    await stream.FlushAsync(); // ВАЖНО: сбрасываем буфер!
-                    Console.WriteLine($"[Отправлено {data.Length} байт]");
+                    var messageBytes = Encoding.UTF8.GetBytes(text);
+                    var encrypted = crypto.Encrypt(messageBytes, sharedSecret);
+                    
+                    await stream.WriteAsync(encrypted, 0, encrypted.Length);
+                    await stream.FlushAsync();
+                    
+                    Console.WriteLine($"[Отправлено {encrypted.Length} байт (зашифровано)]");
                     Console.Write("> ");
                 }
             }
 
             client.Close();
+            listener.Stop();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ ОШИБКА: {ex.Message}");
         }
     }
-    catch (Exception ex)
+    else if (role == "2")
     {
-        Console.WriteLine($"❌ ОШИБКА: {ex.Message}");
-        Console.WriteLine($"Детали: {ex.InnerException?.Message}");
+        // ============ КЛИЕНТ ============
+        Console.WriteLine("\n[Система] Поиск устройств...");
+        
+        try
+        {
+            var client = new BluetoothClient();
+            var devices = client.DiscoverDevices();
+            var deviceList = devices.ToList();
+            
+            Console.WriteLine($"Найдено устройств: {deviceList.Count}\n");
+            
+            for (int i = 0; i < deviceList.Count; i++)
+            {
+                var device = deviceList[i];
+                if (device.DeviceName != null && device.DeviceName.Length > 0)
+                {
+                    Console.WriteLine($"{i + 1}. {device.DeviceName} ({device.DeviceAddress})");
+                }
+            }
+            
+            Console.Write("\nВыбери устройство (номер): ");
+            var choice = Console.ReadLine();
+            
+            if (int.TryParse(choice, out int index) && index > 0 && index <= deviceList.Count)
+            {
+                var targetDevice = deviceList[index - 1];
+                
+                Console.WriteLine($"\n[Система] Подключение к {targetDevice.DeviceName}...");
+                
+                await client.ConnectAsync(targetDevice.DeviceAddress, BluetoothService.SerialPort);
+                
+                var stream = client.GetStream();
+                
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("✅ CONNECTED!");
+                Console.ResetColor();
+
+                // === ГЕНЕРАЦИЯ КЛЮЧЕЙ ===
+                Console.WriteLine("\n[Криптография] Генерация пары ключей X25519...");
+                var crypto = new CryptoService();
+                var (myPub, myPriv) = crypto.GenerateKeyPair();
+                
+                Console.WriteLine($"\n[Твой публичный ключ]:\n{Convert.ToBase64String(myPub)}\n");
+                
+                // Получаем публичный ключ собеседника (он отправил первым)
+                var buffer = new byte[2048];
+                var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                var theirPubStr = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                var theirPub = Convert.FromBase64String(theirPubStr);
+                
+                Console.WriteLine($"\n[Публичный ключ собеседника]:\n{theirPubStr}\n");
+                
+                // Отправляем свой публичный ключ
+                var myPubKeyBytes = Encoding.UTF8.GetBytes(Convert.ToBase64String(myPub));
+                await stream.WriteAsync(myPubKeyBytes, 0, myPubKeyBytes.Length);
+                await stream.FlushAsync();
+                
+                // Вычисляем общий секрет
+                var sharedSecret = crypto.ComputeSharedSecret(myPriv, theirPub);
+                
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("✅ ОБЩИЙ СЕКРЕТ ВЫЧИСЛЕН!");
+                Console.WriteLine("🔐 Все сообщения шифруются (XChaCha20-Poly1305)");
+                Console.ResetColor();
+                Console.WriteLine("\nМожно писать сообщения (для выхода 'exit'):\n");
+                Console.Write("> ");
+
+                // Чтение в фоновом потоке (с расшифровкой)
+                Task.Run(async () =>
+                {
+                    var readBuffer = new byte[4096];
+                    while (true)
+                    {
+                        try
+                        {
+                            var readBytes = await stream.ReadAsync(readBuffer, 0, readBuffer.Length);
+                            if (readBytes > 0)
+                            {
+                                var encrypted = new byte[readBytes];
+                                Array.Copy(readBuffer, encrypted, readBytes);
+                                
+                                var decrypted = crypto.Decrypt(encrypted, sharedSecret);
+                                var message = Encoding.UTF8.GetString(decrypted);
+                                
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine($"[Собеседник]: {message}");
+                                Console.ResetColor();
+                                Console.Write("> ");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"\n[Ошибка чтения]: {ex.Message}");
+                            break;
+                        }
+                    }
+                });
+
+                // Отправка (с шифрованием)
+                while (true)
+                {
+                    var text = Console.ReadLine();
+                    if (text.ToLower() == "exit") break;
+
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        var messageBytes = Encoding.UTF8.GetBytes(text);
+                        var encrypted = crypto.Encrypt(messageBytes, sharedSecret);
+                        
+                        await stream.WriteAsync(encrypted, 0, encrypted.Length);
+                        await stream.FlushAsync();
+                        
+                        Console.WriteLine($"[Отправлено {encrypted.Length} байт (зашифровано)]");
+                        Console.Write("> ");
+                    }
+                }
+
+                client.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ ОШИБКА: {ex.Message}");
+            Console.WriteLine($"Детали: {ex.InnerException?.Message}");
+        }
     }
-}
 }
