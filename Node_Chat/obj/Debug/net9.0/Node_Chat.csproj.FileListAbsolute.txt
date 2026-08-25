@@ -10,3 +10,4 @@ C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\Node_Chat.dll
 C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\refint\Node_Chat.dll
 C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\Node_Chat.pdb
 C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\ref\Node_Chat.dll
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat\obj\Debug\net9.0\Node_Chat.sourcelink.json

@@ -1,12 +1,55 @@
-﻿using Node.Chat.Core.Crypto;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Windows.Devices.Bluetooth.Advertisement;
+using Windows.Security.Cryptography;
+using Windows.Storage.Streams;
+using Node.Chat.Core.Crypto;
 
-var crypto = new CryptoService();
-const int PORT = 11000;
+// Фиксация режима 1 - WIFI Direct (UDP) 2 - BLE (Bluetooth Low Energy)
+// пусто - режим выбирается после запуска
+const string DEBUG_MODE = ""; 
 
-// Шаг 1: Генерация ключей
+Console.WriteLine("Добро пожаловать в Node Chat");
+
+string selectedMode = DEBUG_MODE;
+
+// Если хак не задан, показываем меню
+if (string.IsNullOrEmpty(selectedMode))
+{
+    Console.WriteLine("Компиляция режимов связи");
+    Task.Delay(1000).Wait();
+    Console.WriteLine("Выбери режим работы:");
+    Console.WriteLine("1. UDP (Wi-Fi / Локальная сеть)");
+    Console.WriteLine("2. BLE (Bluetooth Low Energy)");
+    Console.Write("Ввод: ");
+    var choice = Console.ReadLine();
+    selectedMode = choice == "1" ? "UDP" : "BLE";
+}
+else
+{
+    Console.WriteLine($"[DEBUG] Автозапуск в режиме: {selectedMode} (см. константу DEBUG_MODE)\n");
+}
+
+if (selectedMode == "UDP")
+{
+    RunUdpMode();
+}
+else if (selectedMode == "BLE")
+{
+    RunBleMode();
+}
+
+// ==========================================
+// РЕЖИМ 1: UDP (То, что работало с картошкой)
+// ==========================================
+void RunUdpMode()
+{
+    Console.WriteLine("=== ЗАПУСК UDP РЕЖИМА ===");
+    var crypto = new CryptoService();
+    const int PORT = 11000;
+
+    // Шаг 1: Генерация ключей
 Console.WriteLine("[1/4] Генерация ключей...");
 var (myPub, myPriv) = crypto.GenerateKeyPair();
 Console.WriteLine($"Твой публичный ключ:\n{Convert.ToBase64String(myPub)}\n");
@@ -88,3 +131,53 @@ while (true)
 // Ждем завершения фонового потока
 Task.Delay(1000).Wait();
 Console.WriteLine("До свидания!");
+}
+
+// ==========================================
+// РЕЖИМ 2: BLE (Новый Dual-режим)
+// ==========================================
+void RunBleMode()
+{
+    Console.WriteLine("=== ЗАПУСК BLE РЕЖИМА ===");
+    Console.WriteLine("[Система] Настройка вещателя и сканера...");
+
+    // 1. ВЕЩАТЕЛЬ (ADVERTISER)
+    var publisher = new BluetoothLEAdvertisementPublisher();
+    var manufacturerData = new BluetoothLEManufacturerData();
+    manufacturerData.CompanyId = 0xFFFE; // Тестовый ID
+    manufacturerData.Data = CryptographicBuffer.ConvertStringToBinary("NODE_CHAT", BinaryStringEncoding.Utf8);
+    publisher.Advertisement.ManufacturerData.Add(manufacturerData);
+
+    // 2. СКАНЕР (WATCHER)
+    var watcher = new BluetoothLEAdvertisementWatcher();
+    watcher.Received += (sender, args) =>
+    {
+        foreach (var data in args.Advertisement.ManufacturerData)
+        {
+            if (data.CompanyId == 0xFFFE)
+            {
+                var message = CryptographicBuffer.ConvertBinaryToString(BinaryStringEncoding.Utf8, data.Data);
+                var rssi = args.RawSignalStrengthInDBm;
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"[НАЙДЕН NODE] Сигнал: {rssi} dBm | Данные: {message}");
+                Console.ResetColor();
+            }
+        }
+    };
+    
+    // 3. ЗАПУСК
+    publisher.Start();
+    watcher.Start();
+
+    Console.WriteLine("✅ BLE DUAL РЕЖИМ АКТИВИРОВАН.");
+    Console.WriteLine("Я вещаю 'NODE_CHAT' и слушаю эфир.");
+    Console.WriteLine("Запусти этот же код на втором ноутбуке!");
+    Console.WriteLine("Нажми любую клавишу для выхода...\n");
+
+    Console.ReadKey();
+
+    watcher.Stop();
+    publisher.Stop();
+    Console.WriteLine("\n[Система] BLE Радио выключено.");
+}

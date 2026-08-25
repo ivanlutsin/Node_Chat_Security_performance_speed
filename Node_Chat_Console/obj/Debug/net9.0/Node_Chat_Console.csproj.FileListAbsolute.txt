@@ -36,3 +36,4 @@ C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat_Console\obj\Debug\net9.0\refint
 C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat_Console\obj\Debug\net9.0\Node_Chat_Console.pdb
 C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat_Console\obj\Debug\net9.0\Node_Chat_Console.genruntimeconfig.cache
 C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat_Console\obj\Debug\net9.0\ref\Node_Chat_Console.dll
+C:\Users\ivanl\RiderProjects\Node_Chat\Node_Chat_Console\obj\Debug\net9.0\Node_Chat_Console.sourcelink.json
