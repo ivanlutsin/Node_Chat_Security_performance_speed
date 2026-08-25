@@ -1,7 +1,9 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.Advertisement;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Security.Cryptography;
 using Windows.Storage.Streams;
 using Node.Chat.Core.Crypto;
@@ -42,7 +44,7 @@ else if (selectedMode == "BLE")
 
 // ==========================================
 // РЕЖИМ 1: UDP (То, что работало с картошкой)
-// ==========================================
+// ==========================================2
 void RunUdpMode()
 {
     Console.WriteLine("=== ЗАПУСК UDP РЕЖИМА ===");
@@ -136,48 +138,122 @@ Console.WriteLine("До свидания!");
 // ==========================================
 // РЕЖИМ 2: BLE (Новый Dual-режим)
 // ==========================================
-void RunBleMode()
+
+async Task RunBleMode()
 {
     Console.WriteLine("=== ЗАПУСК BLE РЕЖИМА ===");
-    Console.WriteLine("[Система] Настройка вещателя и сканера...");
-
-    // 1. ВЕЩАТЕЛЬ (ADVERTISER)
-    var publisher = new BluetoothLEAdvertisementPublisher();
-    var manufacturerData = new BluetoothLEManufacturerData();
-    manufacturerData.CompanyId = 0xFFFE; // Тестовый ID
-    manufacturerData.Data = CryptographicBuffer.ConvertStringToBinary("NODE_CHAT", BinaryStringEncoding.Utf8);
-    publisher.Advertisement.ManufacturerData.Add(manufacturerData);
-
-    // 2. СКАНЕР (WATCHER)
-    var watcher = new BluetoothLEAdvertisementWatcher();
-    watcher.Received += (sender, args) =>
+    
+    try
     {
-        foreach (var data in args.Advertisement.ManufacturerData)
-        {
-            if (data.CompanyId == 0xFFFE)
-            {
-                var message = CryptographicBuffer.ConvertBinaryToString(BinaryStringEncoding.Utf8, data.Data);
-                var rssi = args.RawSignalStrengthInDBm;
+        // 1. ВЕЩАТЕЛЬ
+        Console.WriteLine("[Система] Настройка вещателя...");
+        var publisher = new BluetoothLEAdvertisementPublisher();
+        var manufacturerData = new BluetoothLEManufacturerData();
+        manufacturerData.CompanyId = 0xFFFE;
+        manufacturerData.Data = CryptographicBuffer.ConvertStringToBinary("NODE_CHAT", BinaryStringEncoding.Utf8);
+        publisher.Advertisement.ManufacturerData.Add(manufacturerData);
 
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"[НАЙДЕН NODE] Сигнал: {rssi} dBm | Данные: {message}");
-                Console.ResetColor();
+        // 2. СКАНЕР
+        Console.WriteLine("[Система] Настройка сканера...");
+        var watcher = new BluetoothLEAdvertisementWatcher();
+        BluetoothLEDevice connectedDevice = null;
+        GattCharacteristic messageCharacteristic = null;
+
+        watcher.Received += async (sender, args) =>
+        {
+            foreach (var data in args.Advertisement.ManufacturerData)
+            {
+                if (data.CompanyId == 0xFFFE)
+                {
+                    var rssi = args.RawSignalStrengthInDBm;
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"[НАЙДЕН NODE] Сигнал: {rssi} dBm");
+                    Console.ResetColor();
+
+                    // Подключаемся только если еще не подключены
+                    if (connectedDevice == null && rssi > -80)
+                    {
+                        try
+                        {
+                            Console.WriteLine("[Система] Подключение...");
+                            connectedDevice = await BluetoothLEDevice.FromBluetoothAddressAsync(args.BluetoothAddress);
+                            
+                            if (connectedDevice != null)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("[Система] ✅ Подключено! Можно писать сообщения.");
+                                Console.ResetColor();
+                                Console.Write("> ");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"[Ошибка подключения]: {ex.Message}");
+                        }
+                    }
+                }
+            }
+        };
+
+        // 3. ЗАПУСК
+        publisher.Start();
+        watcher.Start();
+
+        Console.WriteLine("\n✅ BLE РЕЖИМ АКТИВИРОВАН");
+        Console.WriteLine("Пиши сообщения и жми Enter (для выхода 'exit'):\n");
+        Console.Write("> ");
+
+        // 4. ЦИКЛ ОТПРАВКИ
+        while (true)
+        {
+            var text = Console.ReadLine();
+            if (text.ToLower() == "exit") break;
+
+            if (!string.IsNullOrEmpty(text) && connectedDevice != null)
+            {
+                try
+                {
+                    // Получаем все сервисы устройства
+                    var servicesResult = await connectedDevice.GetGattServicesAsync();
+                    
+                    foreach (var service in servicesResult.Services)
+                    {
+                        // Ищем наш сервис (по UUID)
+                        var charsResult = await service.GetCharacteristicsAsync();
+                        
+                        foreach (var chr in charsResult.Characteristics)
+                        {
+                            // Пытаемся записать в любую характеристику
+                            if ((chr.CharacteristicProperties & GattCharacteristicProperties.Write) != 0)
+                            {
+                                var buffer = CryptographicBuffer.ConvertStringToBinary(text, BinaryStringEncoding.Utf8);
+                                await chr.WriteValueAsync(buffer);
+                                Console.WriteLine($"[Отправлено]: {text}");
+                                Console.Write("> ");
+                                break;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[Ошибка отправки]: {ex.Message}");
+                    Console.Write("> ");
+                }
+            }
+            else if (connectedDevice == null)
+            {
+                Console.WriteLine("[Система] Еще не подключено. Жду собеседника...");
             }
         }
-    };
-    
-    // 3. ЗАПУСК
-    publisher.Start();
-    watcher.Start();
 
-    Console.WriteLine("✅ BLE DUAL РЕЖИМ АКТИВИРОВАН.");
-    Console.WriteLine("Я вещаю 'NODE_CHAT' и слушаю эфир.");
-    Console.WriteLine("Запусти этот же код на втором ноутбуке!");
-    Console.WriteLine("Нажми любую клавишу для выхода...\n");
-
-    Console.ReadKey();
-
-    watcher.Stop();
-    publisher.Stop();
-    Console.WriteLine("\n[Система] BLE Радио выключено.");
+        // 5. ОСТАНОВКА
+        watcher.Stop();
+        publisher.Stop();
+        Console.WriteLine("\n[Система] BLE выключен.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ ОШИБКА: {ex.Message}");
+    }
 }
